@@ -42,16 +42,18 @@ class ViewController: UIViewController {
             setZero(setting: "")
             results.text = String(format: "%.0f", viewOnLabel)
         }
-        else if sender.tag >= 0 && sender.tag <= 10 {
-            if sender.tag == 10 {
-                if math == "" {
-                    math = "0."
-                } else {
-                    math = math + "."
-                }
-            }
+        else if sender.tag >= 0 && sender.tag < 10 {
             math += String(sender.tag)
             results.text = math
+        }
+        else if sender.tag == 10 && !math.contains(".") {
+            if math == "" {
+                math = "0."
+                results.text = math
+            } else {
+                math += "."
+                results.text = math
+            }
         }
         else if sender.tag == 13 {
             if math == "" {
