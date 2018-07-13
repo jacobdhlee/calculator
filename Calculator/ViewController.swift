@@ -42,10 +42,12 @@ class ViewController: UIViewController {
             setZero(setting: "")
             results.text = String(format: "%.0f", viewOnLabel)
         }
+            
         else if sender.tag >= 0 && sender.tag < 10 {
             math += String(sender.tag)
             results.text = math
         }
+            
         else if sender.tag == 10 && !math.contains(".") {
             if math == "" {
                 math = "0."
@@ -55,6 +57,17 @@ class ViewController: UIViewController {
                 results.text = math
             }
         }
+        else if sender.tag == 12 && previous == "" && priority == "" {
+            if !math.contains("-") {
+                math = "-" + math
+                results.text = math
+            } else {
+                let result = math.dropFirst()
+                math = String(result)
+                results.text = math
+            }
+        }
+            
         else if sender.tag == 13 {
             if math == "" {
                 math = ""
@@ -62,6 +75,7 @@ class ViewController: UIViewController {
             math = String(Double(math)! / 100)
             results.text = math
         }
+            
         else if sender.tag == 14 || sender.tag == 15 {
             if priority != "" {
                 let op = sender.tag
@@ -94,6 +108,7 @@ class ViewController: UIViewController {
                 }
             }
         }
+            
         else if sender.tag == 18 {
             if savedOp.count > 1 {
                 let first = calculate(priority: priority, math: math, op: savedOp[1])
