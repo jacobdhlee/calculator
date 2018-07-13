@@ -28,23 +28,24 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
+    func setZero(setting: String) {
+        viewOnLabel = 0
+        math = setting
+        priority = ""
+        previous = ""
+        savedOp = [Int]()
+    }
+    
     @IBAction func buttonPress(_ sender: AnyObject) {
-        // tag 11 = reset
         if sender.tag == 11 {
-            viewOnLabel = 0
-            math = ""
-            priority = ""
-            previous = ""
-            savedOp = [Int]()
+            setZero(setting: "")
             results.text = String(format: "%.0f", viewOnLabel)
         }
-        // tag 0 - 10 = numbers
         else if sender.tag >= 0 && sender.tag < 10 {
             math += String(sender.tag)
             results.text = math
         }
-        //tag 14 devide 15 times 16 minus 17 plus
         else if sender.tag == 14 || sender.tag == 15 {
             if priority != "" {
                 let op = sender.tag
@@ -63,14 +64,38 @@ class ViewController: UIViewController {
                 previous = calculate(priority: previous, math: math, op: op!)
                 math = ""
             } else {
-                previous = math
-                savedOp.append(sender.tag)
-                math = ""
+                if savedOp.count == 0 {
+                    previous = math
+                    savedOp.append(sender.tag)
+                    math = ""
+                }
+                if savedOp[0] == 14 || savedOp[0] == 15 {
+                    previous = calculate(priority: priority, math: math, op: savedOp[0])
+                    savedOp.removeFirst(1)
+                    savedOp.append(sender.tag)
+                    math = ""
+                    priority = ""
+                }
             }
         }
-        //tag 18 calculate
         else if sender.tag == 18 {
-            print(savedOp)
+            if savedOp.count > 1 {
+                let first = calculate(priority: priority, math: math, op: savedOp[1])
+                let second = calculate(priority: first, math: previous, op: savedOp[0])
+                results.text = second
+                setZero(setting: second)
+            } else {
+                if priority != "" {
+                    let result = calculate(priority: priority, math: math, op: savedOp[0])
+                    results.text = result
+                    setZero(setting: result)
+                }
+                else if previous != "" {
+                    let result = calculate(priority: previous, math: math, op: savedOp[0])
+                    results.text = result
+                    setZero(setting: result)
+                }
+            }
         }
         
     }
