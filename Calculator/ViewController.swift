@@ -71,9 +71,10 @@ class ViewController: UIViewController {
         else if sender.tag == 13 {
             if math == "" {
                 math = ""
+            } else {
+                math = String(Double(math)! / 100)
+                results.text = math
             }
-            math = String(Double(math)! / 100)
-            results.text = math
         }
             
         else if sender.tag == 14 || sender.tag == 15 {
